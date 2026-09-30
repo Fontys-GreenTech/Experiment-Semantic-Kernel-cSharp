@@ -2,16 +2,30 @@
 using System.Threading;
 using System.Threading.Tasks;
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+using MskCore.Chat;
+
 namespace MskConsole;
 
-public sealed class AppRunner(ILogger<AppRunner> logger) : BackgroundService
+public sealed class AppRunner(ILogger<AppRunner> logger, IServiceScopeFactory scopeFactory) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        Console.WriteLine("Hello");
-        logger.WroteHello("Hello");
+        await Task.Yield();
+
+        using var scope = scopeFactory.CreateScope();
+        var session = scope.ServiceProvider.GetRequiredService<ChatSession>();
+
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            Console.Write("User > ");
+            var input = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(input)) break;
+
+            Console.WriteLine("Assistant > " + await session.SendAsync(input, stoppingToken));
+        }
     }
 }

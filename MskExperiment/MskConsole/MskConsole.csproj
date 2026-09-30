@@ -2,7 +2,8 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-    </PropertyGroup>
+      <UserSecretsId>92ea674a-8c6e-4d12-8db3-a61bb997db6f</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\MskCore\MskCore.csproj" />
@@ -20,6 +21,12 @@
       <Compile Update="AppRunnerLoggerMethods.cs">
         <DependentUpon>AppRunner.cs</DependentUpon>
       </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
