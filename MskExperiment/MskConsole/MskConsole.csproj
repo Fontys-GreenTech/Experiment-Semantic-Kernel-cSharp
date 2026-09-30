@@ -4,4 +4,22 @@
         <OutputType>Exe</OutputType>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\MskCore\MskCore.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.*" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="11.0.0-rc.1.26425.128" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="AppRunnerLoggerMethods.cs">
+        <DependentUpon>AppRunner.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>
