@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 
 using MskCore.Chat;
+using MskCore.IO;
 using MskCore.Options;
 using MskCore.Plugins;
 
@@ -14,6 +15,9 @@ public static class ServiceExtensions
 {
     public static void AddMskCore(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddSingleton<ICsvReader, CsvReader>();
+        services.AddSingleton<IPdfGenerator, PdfGenerator>();
+        
         var options = configuration.GetSection(MskOptions.Section).Get<MskOptions>();
         if (string.IsNullOrWhiteSpace(options!.ApiKey))
             throw new InvalidOperationException("Msk:ApiKey is not configured.");
@@ -24,7 +28,9 @@ public static class ServiceExtensions
             endpoint: new Uri(options.Endpoint),
             apiKey: options.ApiKey);
 
-        kernelBuilder.Plugins.AddFromType<LightsPlugin>("Lights");
+        kernelBuilder.Plugins.AddFromType<MathPlugin>("Math");
+        kernelBuilder.Plugins.AddFromType<CsvPlugin>("Csv");
+        kernelBuilder.Plugins.AddFromType<PdfPlugin>("Pdf");
 
         services.AddScoped<ChatSession>();
     }

@@ -4,6 +4,7 @@
     <File Path=".gitignore" />
     <File Path="Directory.Build.props" />
   </Folder>
+  <Project Path="MskBenchmarks/MskBenchmarks.csproj" />
   <Project Path="MskConsole/MskConsole.csproj" />
   <Project Path="MskCore/MskCore.csproj" />
 </Solution>
