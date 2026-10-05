@@ -1,6 +1,6 @@
 ﻿namespace MskCore.Options;
 
-public sealed class MskOptions
+public sealed record MskOptions
 {
     public const string Section = "Msk";
 

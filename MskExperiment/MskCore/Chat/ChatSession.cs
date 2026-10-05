@@ -1,19 +1,23 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
+using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 
+using MskCore.Options;
+
 namespace MskCore.Chat;
 
-public sealed class ChatSession(Kernel kernel, IChatCompletionService chat)
+public sealed class ChatSession(Kernel kernel, IChatCompletionService chat, IOptions<PromptExecutionOptions> options)
 {
     private readonly ChatHistory _history = new();
     private readonly OpenAIPromptExecutionSettings _settings = new()
     {
         FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(),
-        Temperature = 0.7
+        Temperature = options.Value.Temperature
     };
 
     public async Task<string> SendAsync(string userInput, CancellationToken ct = default)

@@ -15,6 +15,8 @@ public static class ServiceExtensions
 {
     public static void AddMskCore(this IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<PromptExecutionOptions>(configuration.GetSection(nameof(PromptExecutionOptions)));
+            
         services.AddSingleton<ICsvReader, CsvReader>();
         services.AddSingleton<IPdfGenerator, PdfGenerator>();
         

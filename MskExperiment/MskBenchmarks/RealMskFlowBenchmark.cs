@@ -2,6 +2,7 @@ using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Jobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 
@@ -50,7 +51,8 @@ public class RealMskFlowBenchmark
 
         _kernel = builder.Build();
         var chat = _kernel.GetRequiredService<IChatCompletionService>();
-        _session = new ChatSession(_kernel, chat);
+        var llmOptions = Options.Create(new PromptExecutionOptions { Temperature = 0 });
+        _session = new ChatSession(_kernel, chat, llmOptions);
     }
 
     [Benchmark]
