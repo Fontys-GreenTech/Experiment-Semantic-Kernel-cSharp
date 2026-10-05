@@ -6,7 +6,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        BenchmarkRunner.Run<MskFlowBenchmark>();
+        BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
     }
 }
 

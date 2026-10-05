@@ -12,7 +12,8 @@ public sealed class ChatSession(Kernel kernel, IChatCompletionService chat)
     private readonly ChatHistory _history = new();
     private readonly OpenAIPromptExecutionSettings _settings = new()
     {
-        FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
+        FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(),
+        Temperature = 0.7
     };
 
     public async Task<string> SendAsync(string userInput, CancellationToken ct = default)

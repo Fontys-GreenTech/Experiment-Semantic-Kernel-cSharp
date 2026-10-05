@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <OutputType>Exe</OutputType>
+        <UserSecretsId>92ea674a-8c6e-4d12-8db3-a61bb997db6f</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,6 +14,17 @@
 
     <ItemGroup>
       <PackageReference Include="BenchmarkDotNet" Version="0.16.0-preview.2" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="11.0.0-rc.1.26425.128" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="11.0.0-rc.1.26425.128" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="11.0.0-rc.1.26425.128" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="11.0.0-rc.1.26425.128" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="11.0.0-rc.1.26425.128" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="..\MskConsole\appsettings.json" Link="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
