@@ -57,13 +57,14 @@ public class ConcurrencyBenchmark
     public async Task RunConcurrentRequestsAsync()
     {
         int totalRequests = 15;
-        using var semaphore = new SemaphoreSlim(Concurrency);
         var tasks = new Task[totalRequests];
+        using var semaphore = new SemaphoreSlim(Concurrency);
 
         for (int i = 0; i < totalRequests; i++)
         {
             tasks[i] = Task.Run(async () =>
             {
+                // ReSharper disable once AccessToDisposedClosure
                 await semaphore.WaitAsync();
                 try
                 {
@@ -72,6 +73,7 @@ public class ConcurrencyBenchmark
                 }
                 finally
                 {
+                    // ReSharper disable once AccessToDisposedClosure
                     semaphore.Release();
                 }
             });
