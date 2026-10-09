@@ -1,20 +1,28 @@
 using BenchmarkDotNet.Attributes;
+
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
+
 using MskBenchmarks.Mocks;
+
 using MskCore.IO;
 using MskCore.Plugins;
 
-namespace MskBenchmarks;
+namespace MskBenchmarks.Benchmarks;
 
 [MemoryDiagnoser]
-public class MskFlowBenchmark
+[SimpleJob(iterationCount: 3, warmupCount: 0)]
+[Config(typeof(ConcurrencyConfig))]
+public class ConcurrencyBenchmark
 {
     private Kernel _kernel = null!;
     private IChatCompletionService _chat = null!;
     private PromptExecutionSettings _settings = null!;
+
+    [Params(1, 3, 5)]
+    public int Concurrency { get; set; }
 
     [GlobalSetup]
     public void Setup()
@@ -26,7 +34,6 @@ public class MskFlowBenchmark
             ["generate_fiscal_report_pdf"] = new() { ["reportTitle"] = "Fiscal report", ["overviewText"] = "Text", ["adviceText"] = "Text" },
         });
 
-        // SK's own invoking client wraps the mock, same as a real connector would
         IChatClient client = new ChatClientBuilder(mock)
             .UseKernelFunctionInvocation()
             .Build();
@@ -46,10 +53,30 @@ public class MskFlowBenchmark
         };
     }
 
-    [Benchmark]
-    public async Task RunMskFlowMockAsync()
+    [Benchmark(Description = "Concurrent 15 Requests")]
+    public async Task RunConcurrentRequestsAsync()
     {
-        var history = new ChatHistory("Analyze data.csv, review financials, and generate fiscal report PDF.");
-        await _chat.GetChatMessageContentAsync(history, _settings, _kernel);
+        int totalRequests = 15;
+        using var semaphore = new SemaphoreSlim(Concurrency);
+        var tasks = new Task[totalRequests];
+
+        for (int i = 0; i < totalRequests; i++)
+        {
+            tasks[i] = Task.Run(async () =>
+            {
+                await semaphore.WaitAsync();
+                try
+                {
+                    var history = new ChatHistory("Analyze data.csv, review financials, and generate fiscal report PDF.");
+                    await _chat.GetChatMessageContentAsync(history, _settings, _kernel);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
+            });
+        }
+
+        await Task.WhenAll(tasks);
     }
 }

@@ -1,5 +1,5 @@
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -13,7 +13,7 @@ using MskCore.IO;
 using MskCore.Options;
 using MskCore.Plugins;
 
-namespace MskBenchmarks;
+namespace MskBenchmarks.Benchmarks;
 
 [MemoryDiagnoser]
 [SimpleJob(iterationCount: 3, warmupCount: 0)]
@@ -40,6 +40,7 @@ public class RealMskFlowBenchmark
         var builder = Kernel.CreateBuilder();
         builder.Services.AddSingleton<ICsvReader, MockCsvReader>();
         builder.Services.AddSingleton<IPdfGenerator, MockPdfGenerator>();
+        builder.Services.AddSingleton<TokenUsageMonitor>();
         builder.Plugins.AddFromType<CsvPlugin>("Csv");
         builder.Plugins.AddFromType<MathPlugin>("Math");
         builder.Plugins.AddFromType<PdfPlugin>("Pdf");
@@ -52,7 +53,8 @@ public class RealMskFlowBenchmark
         _kernel = builder.Build();
         var chat = _kernel.GetRequiredService<IChatCompletionService>();
         var llmOptions = Options.Create(new PromptExecutionOptions { Temperature = 0 });
-        _session = new ChatSession(_kernel, chat, llmOptions);
+        var usageMonitor = _kernel.GetRequiredService<TokenUsageMonitor>();
+        _session = new ChatSession(_kernel, chat, llmOptions, usageMonitor);
     }
 
     [Benchmark]

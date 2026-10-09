@@ -1,6 +1,8 @@
 using BenchmarkDotNet.Configs;
 
-namespace MskBenchmarks;
+using MskBenchmarks.Columns;
+
+namespace MskBenchmarks.Benchmarks;
 
 public class ConcurrencyConfig : ManualConfig
 {

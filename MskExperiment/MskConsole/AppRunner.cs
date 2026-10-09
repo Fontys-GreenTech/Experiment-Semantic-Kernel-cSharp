@@ -18,6 +18,8 @@ public sealed class AppRunner(ILogger<AppRunner> logger, IServiceScopeFactory sc
 
         using var scope = scopeFactory.CreateScope();
         var session = scope.ServiceProvider.GetRequiredService<ChatSession>();
+        
+        logger.Entry();
 
         while (!stoppingToken.IsCancellationRequested)
         {

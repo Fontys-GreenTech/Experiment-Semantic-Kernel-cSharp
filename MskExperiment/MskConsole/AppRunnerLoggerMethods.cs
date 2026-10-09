@@ -4,6 +4,6 @@ namespace MskConsole;
 
 public static partial class AppRunnerLoggerMethods
 {
-    [LoggerMessage(LogLevel.Error, "Wrote '{Message}'")]
-    public static partial void WroteHello(this ILogger<AppRunner> logger, string message);
+    [LoggerMessage(LogLevel.Information, "Application started, chat service running")]
+    public static partial void Entry(this ILogger<AppRunner> logger);
 }

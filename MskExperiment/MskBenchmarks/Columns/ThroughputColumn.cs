@@ -1,9 +1,8 @@
-using System.Linq;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 
-namespace MskBenchmarks;
+namespace MskBenchmarks.Columns;
 
 public class ThroughputColumn : IColumn
 {

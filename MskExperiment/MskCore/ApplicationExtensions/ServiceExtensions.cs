@@ -19,6 +19,7 @@ public static class ServiceExtensions
             
         services.AddSingleton<ICsvReader, CsvReader>();
         services.AddSingleton<IPdfGenerator, PdfGenerator>();
+        services.AddSingleton<ITokenUsageMonitor, TokenUsageMonitor>();
         
         var options = configuration.GetSection(MskOptions.Section).Get<MskOptions>();
         if (string.IsNullOrWhiteSpace(options!.ApiKey))

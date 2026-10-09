@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.Options;
@@ -11,7 +10,7 @@ using MskCore.Options;
 
 namespace MskCore.Chat;
 
-public sealed class ChatSession(Kernel kernel, IChatCompletionService chat, IOptions<PromptExecutionOptions> options)
+public sealed class ChatSession(Kernel kernel, IChatCompletionService chat, IOptions<PromptExecutionOptions> options, ITokenUsageMonitor tokenUsageMonitor)
 {
     private readonly ChatHistory _history = new();
     private readonly OpenAIPromptExecutionSettings _settings = new()
@@ -24,6 +23,14 @@ public sealed class ChatSession(Kernel kernel, IChatCompletionService chat, IOpt
     {
         _history.AddUserMessage(userInput);
         var result = await chat.GetChatMessageContentAsync(_history, _settings, kernel, ct);
+
+        if (result.InnerContent is OpenAI.Chat.ChatCompletion innerContent)
+        {
+            tokenUsageMonitor.InputTokens = innerContent.Usage.InputTokenCount;
+            tokenUsageMonitor.OutputTokens = innerContent.Usage.OutputTokenCount;
+            tokenUsageMonitor.TotalTokens = innerContent.Usage.TotalTokenCount;
+        }
+        
         _history.AddAssistantMessage(result.Content ?? string.Empty);
         return result.Content ?? string.Empty;
     }
