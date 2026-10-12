@@ -21,7 +21,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Set User Secret
-      run: dotnet user-secrets set "Msk:ApiKey" "${{ secrets.GOOGLE_API_KEY }}" --project MskBenchmark.csproj
+      run: dotnet user-secrets set "Msk:ApiKey" "${{ secrets.GOOGLE_API_KEY }}" --project MskBenchmarks/MskBenchmark.csproj
     - name: Build
       run: dotnet build --no-restore
     - name: Test
