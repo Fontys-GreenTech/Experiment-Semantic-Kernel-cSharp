@@ -11,6 +11,13 @@ public class Program
         // If BenchmarkDotNet args are passed (e.g. --filter *), skip the menu
         if (args.Length > 0)
         {
+            if (args is ["*"])
+            {
+                await BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).RunAllJoinedAsync();
+                await TokenUsageBenchmark.Run();
+                return;
+            }
+            
             await BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).RunAsync(args);
             return;
         }
