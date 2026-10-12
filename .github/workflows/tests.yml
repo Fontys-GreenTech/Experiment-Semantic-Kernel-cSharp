@@ -23,6 +23,6 @@ jobs:
     - name: Set User Secret
       run: dotnet user-secrets set "Msk:ApiKey" "${{ secrets.GOOGLE_API_KEY }}" --project MskBenchmarks/MskBenchmarks.csproj
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet run --project MskBenchmarks/MskBenchmarks.csproj --no-build --verbosity normal --property:Configuration=Release *
+      run: dotnet run --project MskBenchmarks/MskBenchmarks.csproj --no-build --verbosity normal --configuration Release '*'
