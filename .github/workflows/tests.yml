@@ -4,8 +4,8 @@
 name: .NET
 
 on:
-  #pull_request:
-    #branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -25,4 +25,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet run --no-build --verbosity normal
+      run: dotnet run --no-build --verbosity normal --property:Configuration=Release *
