@@ -25,4 +25,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet run --no-build --verbosity normal --property:Configuration=Release *
+      run: dotnet run --project MskBenchmarks/MskBenchmarks.csproj --no-build --verbosity normal --property:Configuration=Release *
