@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/SolutionItems/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Dockerfile" />
+  </Folder>
+  <Project Path="MskBenchmarks/MskBenchmarks.csproj" />
+  <Project Path="MskConsole/MskConsole.csproj" />
+  <Project Path="MskCore/MskCore.csproj" />
+</Solution>
